@@ -1,0 +1,46 @@
+intent,example_query
+fare_enquiry,How much does it cost to travel between two stations?
+fare_enquiry,Cost of metro journey from point A to point B
+fare_enquiry,What is metro fare estimation?
+last_train,When is last metro service from this station?
+last_train,What time does metro close for the day?
+last_train,Latest train timing information
+route_query,Show me the best route from A to B
+route_query,How to reach destination via metro?
+route_query,Metro route planning assistance
+lost_and_found,I lost my wallet on the metro
+lost_and_found,Lost and found office location
+lost_and_found,Where to report lost items on metro
+helpline,DMRC customer care helpline contact
+helpline,How do I call metro customer support?
+helpline,Metro support contact information
+metro_timings,What time does metro start and close?
+metro_timings,Metro station opening closing hours
+metro_timings,Operating hours of metro services
+recharge,How do I recharge my metro smartcard?
+recharge,Top up my metro travel card please
+recharge,Metro card reload and recharge options
+airport,How to reach airport terminal by metro?
+airport,Airport Express line metro route
+airport,Metro airport connection guide
+rules,Metro travel rules and regulations
+rules,What am I allowed to do in metro train?
+rules,Metro code of conduct and restrictions
+wifi,Is WiFi available at metro stations?
+wifi,Free WiFi metro station access
+wifi,Metro station internet connectivity
+parking,Car parking near metro stations
+parking,Park and ride metro facility
+parking,Metro station parking availability
+smart_card,What benefits does metro smartcard provide?
+smart_card,Metro token versus smartcard comparison
+smart_card,Metro smartcard features and advantages
+peak_hours,When is metro most crowded?
+peak_hours,Peak traffic hours in metro system
+peak_hours,Busy metro timings information
+interchange,Which stations allow line transfers?
+interchange,Changing trains at interchange stations
+interchange,Metro line transfer stations list
+strike,Is there a metro strike happening?
+strike,Strike status of metro system
+strike,Any metro closures or lockdown?

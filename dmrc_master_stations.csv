@@ -1,0 +1,83 @@
+station_id,station_name,lines,interchange
+DG,Dilshad Garden,red,No
+SD,Shahbad Dairy,red,No
+SB,Shalimar Bagh,"red, pink",Yes
+AV,Ashok Vihar,"red, violet",Yes
+PB,Punjabi Bagh,red,No
+IL,Inder Lok,"red, pink, magenta",Yes
+KN,Kanhaiya Nagar,"red, pink",Yes
+KN2,Kasturba Nagar,"red, yellow, green, violet, pink, magenta, grey",Yes
+LN,Lajpat Nagar,"red, green, violet, pink, magenta",Yes
+J,Jangpura,red,No
+KB,Karol Bagh,red,No
+ND,New Delhi,"red, yellow, violet, airport_express",Yes
+CB,Chawri Bazaar,"red, yellow, green, violet, grey",Yes
+CC,Chandni Chowk,"red, yellow, violet, magenta, grey",Yes
+KG,Kashmere Gate,red,Yes
+CL,Civil Lines,red,No
+OD,Old Delhi,red,No
+NSP,Netaji Subhas Place,"red, yellow, pink, magenta",Yes
+SB2,Samaypur Badli,yellow,No
+RS1,Rohini Sector 18,yellow,No
+RS12,Rohini Sector 16,yellow,No
+RS13,Rohini Sector 15,yellow,No
+PB2,Pul Bangash,yellow,No
+RC,Rajiv Chowk,"yellow, blue, pink, grey",Yes
+PC,Patel Chowk,"yellow, violet, pink",Yes
+CS,Central Secretariat,"yellow, violet",Yes
+UB,Udyog Bhawan,yellow,No
+SE,South Extension,"yellow, pink",Yes
+LG,Lodi Garden,yellow,No
+AC,Amar Colony,yellow,No
+KM,Kalkaji Mandir,"yellow, green, violet, magenta",Yes
+GP,Govind Puri,"yellow, violet",Yes
+OV,Okhla Vihar,"yellow, magenta",Yes
+JMI,Jamia Millia Islamia,"yellow, magenta",Yes
+SV,Sukhdev Vihar,"yellow, magenta",Yes
+BB,Badarpur Border,yellow,No
+NCC,Noida City Center,blue,No
+NEC,Noida Electronic City,blue,No
+NS1,Noida Sector 16,blue,No
+NS12,Noida Sector 18,blue,No
+NS3,Noida Sector 34/Sector 52,blue,No
+NC,Noida Central,blue,No
+SE2,South Ex,"blue, grey",Yes
+DS8,Dwarka Sector 8,"blue, grey",Yes
+DS9,Dwarka Sector 9,"blue, grey",Yes
+DS1,Dwarka Sector 11,"blue, grey",Yes
+DS12,Dwarka Sector 12,"blue, grey",Yes
+DS13,Dwarka Sector 14,"blue, grey",Yes
+D,Dwarka,"blue, grey",Yes
+BR,Barakhamba Road,"blue, pink",Yes
+MH,Mandi House,"blue, pink, magenta",Yes
+PM,Pragati Maidan,"blue, airport_express",Yes
+BHS,Brigadier Hoshiar Singh,green,No
+E,Estakada,green,No
+MVP,Mayur Vihar Phase 1,"green, pink",Yes
+MVE,Mayur Vihar Extension,"green, pink",Yes
+GK,Greater Kailash,"green, magenta",Yes
+NE,Nehru Enclave,green,No
+K,Khanpur,green,No
+A,Ankur,green,No
+BG,Botanical Garden,"green, magenta",Yes
+I,Indraprastha,"green, airport_express",Yes
+MN,Mukherjee Nagar,violet,No
+SN,Shastri Nagar,violet,No
+KM2,Khan Market,"violet, magenta",Yes
+JS,JLN Stadium,violet,No
+M,Moolchand,violet,No
+MP,Majlis Park,pink,No
+A2,Azadpur,pink,No
+M2,Munirka,magenta,No
+C,Chhatarpur,magenta,No
+M3,Mehrauli,magenta,No
+C2,Chhattarpur,magenta,No
+DG2,Delhi Gate,magenta,No
+DS14,Dwarka Sector 13,grey,No
+DS15,Dwarka Sector 10,grey,No
+SS,Shivaji Stadium,airport_express,No
+HN,Hazrat Nizamuddin,airport_express,No
+A3,Aerocity,airport_express,No
+T3,Terminal 3,airport_express,No
+T1,Terminal 1,airport_express,No
+T2,Terminal 2,airport_express,No

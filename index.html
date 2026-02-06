@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetroSahayak - Delhi Metro Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            max-height: 800px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 4px solid #DC143C;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            background: white;
+            border-bottom: 2px solid #eee;
+            padding: 0 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: #667eea;
+        }
+
+        .tab-btn.active {
+            color: #DC143C;
+            border-bottom-color: #DC143C;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: none;
+        }
+
+        .content.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 80%;
+            word-wrap: break-word;
+            animation: slideIn 0.3s ease;
+        }
+
+        .message.bot {
+            background: #f0f0f0;
+            color: #333;
+            align-self: flex-start;
+            border-radius: 12px 12px 12px 0;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            align-self: flex-end;
+            border-radius: 12px 12px 0 12px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 24px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-area button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .input-area button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .route-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .route-display {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #DC143C;
+            animation: slideIn 0.3s ease;
+        }
+
+        .route-display h3 {
+            color: #DC143C;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .route-info {
+            font-size: 14px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .route-info p {
+            margin-bottom: 8px;
+        }
+
+        .stations-list {
+            margin-bottom: 15px;
+        }
+
+        .stations-list h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .station-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .station-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 11px;
+        }
+
+        .fare-info {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .fare-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .fare-info p {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .fare-amount {
+            font-weight: 700;
+            color: #DC143C;
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        .contact-card h3 {
+            font-size: 12px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .contact-card p {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .emergency-tips {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #DC143C;
+            margin-top: 15px;
+        }
+
+        .emergency-tips h3 {
+            color: #DC143C;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .emergency-tips ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .emergency-tips li {
+            padding: 6px 0;
+            border-bottom: 1px solid #ddd;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .emergency-tips li:last-child {
+            border-bottom: none;
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            padding: 20px;
+        }
+
+        .error {
+            padding: 12px;
+            background: #ffebee;
+            color: #c62828;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .message {
+                max-width: 95%;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .emergency-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚇 MetroSahayak</h1>
+            <p>Your Delhi Metro Assistant</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('chat')">💬 Chat</button>
+            <button class="tab-btn" onclick="switchTab('route')">🗺️ Find Route</button>
+            <button class="tab-btn" onclick="switchTab('emergency')">🆘 Emergency</button>
+        </div>
+
+        <!-- Chat Tab -->
+        <div id="chat" class="content active">
+            <div class="chat-content">
+                <div class="messages" id="messages">
+                    <div class="message bot">Welcome to MetroSahayak! Ask me about routes, fares, or get emergency help.</div>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="chatInput" placeholder="Ask about routes, fares, or emergency help..." onkeypress="if(event.key==='Enter') sendMessage()">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Route Tab -->
+        <div id="route" class="content">
+            <div class="route-form">
+                <div class="form-group">
+                    <label>From Station</label>
+                    <select id="fromStation">
+                        <option value="">Select a station...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>To Station</label>
+                    <select id="toStation">
+                        <option value="">Select a station...</option>
+                    </select>
+                </div>
+                <button class="search-btn" onclick="findRoute()">Search Route</button>
+            </div>
+            <div id="routeResults" style="flex: 1; overflow-y: auto; margin-top: 15px;"></div>
+        </div>
+
+        <!-- Emergency Tab -->
+        <div id="emergency" class="content">
+            <div class="emergency-grid">
+                <div class="contact-card">
+                    <h3>Customer Care</h3>
+                    <p>155370</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Security (CISF)</h3>
+                    <p>155655</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Lost & Found</h3>
+                    <p>Kashmere Gate</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Medical</h3>
+                    <p>155370</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Women Safety</h3>
+                    <p>155370</p>
+                </div>
+            </div>
+            <div class="emergency-tips">
+                <h3>Safety Tips</h3>
+                <ul>
+                    <li>Keep your belongings safe at all times</li>
+                    <li>Use designated women's coaches during peak hours</li>
+                    <li>Report any suspicious activity immediately</li>
+                    <li>Keep emergency contacts handy</li>
+                    <li>Wait in designated waiting areas on platforms</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://127.0.0.1:8001';
+
+        // Load stations on page load
+        window.addEventListener('load', loadStations);
+
+        function switchTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        async function loadStations() {
+            try {
+                const linesResp = await fetch(`${API_BASE_URL}/lines`);
+                const linesData = await linesResp.json();
+                
+                let allStations = new Set();
+                for (const line of linesData.lines) {
+                    const stationsResp = await fetch(`${API_BASE_URL}/stations/${line.code}`);
+                    const stationsData = await stationsResp.json();
+                    stationsData.stations.forEach(s => allStations.add(s));
+                }
+
+                const stations = Array.from(allStations).sort();
+                
+                // Populate dropdowns
+                const fromSelect = document.getElementById('fromStation');
+                const toSelect = document.getElementById('toStation');
+                
+                stations.forEach(station => {
+                    fromSelect.innerHTML += `<option value="${station}">${station}</option>`;
+                    toSelect.innerHTML += `<option value="${station}">${station}</option>`;
+                });
+            } catch (error) {
+                console.error('Error loading stations:', error);
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Show loading
+            const messagesDiv = document.getElementById('messages');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading';
+            loadingDiv.textContent = 'Typing...';
+            loadingDiv.id = 'loading';
+            messagesDiv.appendChild(loadingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message, language: 'en' })
+                });
+
+                const data = await response.json();
+                document.getElementById('loading').remove();
+                addMessage(data.response, 'bot');
+            } catch (error) {
+                document.getElementById('loading').remove();
+                addMessage('Sorry, an error occurred. Please try again.', 'bot');
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messagesDiv = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${sender}`;
+            messageEl.textContent = text;
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        async function findRoute() {
+            const from = document.getElementById('fromStation').value;
+            const to = document.getElementById('toStation').value;
+            const resultsDiv = document.getElementById('routeResults');
+
+            if (!from || !to) {
+                resultsDiv.innerHTML = '<div class="error">Please select both stations</div>';
+                return;
+            }
+
+            resultsDiv.innerHTML = '<div class="loading">Finding route...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/route`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ from_station: from, to_station: to, language: 'en' })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    resultsDiv.innerHTML = `<div class="error">${error.detail}</div>`;
+                    return;
+                }
+
+                const data = await response.json();
+                displayRoute(data, resultsDiv);
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        function displayRoute(route, container) {
+            let html = `
+                <div class="route-display">
+                    <h3>✓ Route Found</h3>
+                    <div class="route-info">
+                        <p><strong>From:</strong> ${route.from_station}</p>
+                        <p><strong>To:</strong> ${route.to_station}</p>
+                        <p><strong>Distance:</strong> ${route.distance} stations</p>
+                    </div>
+
+                    <div class="stations-list">
+                        <h4>Stations:</h4>
+                        ${route.stations.map((s, i) => `
+                            <div class="station-item">
+                                <span class="station-number">${i + 1}</span>
+                                <span class="station-name">${s}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${route.interchanges.length > 0 ? `
+                        <div class="stations-list">
+                            <h4>Interchanges:</h4>
+                            ${route.interchanges.map(i => `
+                                <div class="station-item">
+                                    <strong>${i.station}</strong>
+                                    <span style="font-size: 11px; color: #999; margin-left: auto;">${i.lines.join(', ')}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+
+                    <div class="fare-info">
+                        <h4>Fares:</h4>
+                        <p><span>Base:</span> <span class="fare-amount">₹${route.fare.base_fare}</span></p>
+                        <p><span>Off-Peak:</span> <span class="fare-amount">₹${route.fare.off_peak_fare}</span></p>
+                        <p><span>Smart Card:</span> <span class="fare-amount">₹${route.fare.smart_card_fare}</span></p>
+                    </div>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

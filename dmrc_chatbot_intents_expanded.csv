@@ -1,0 +1,43 @@
+intent,example_query
+fare_enquiry,What is the fare from Rajiv Chowk to INA?
+fare_enquiry,How much does it cost to travel from Kashmere Gate to New Delhi?
+fare_enquiry,Metro ticket price from Central Secretariat to Dwarka
+last_train,Last metro from Kashmere Gate to Central Secretariat
+last_train,What time is the last train from Rajiv Chowk?
+last_train,When does the metro close?
+route_query,How to go from New Delhi to INA by metro?
+route_query,Best route from Kashmere Gate to Rajiv Chowk
+route_query,How can I reach airport from Rajiv Chowk?
+lost_and_found,I lost my wallet in metro what should I do?
+lost_and_found,Where is the lost and found office?
+lost_and_found,I left my bag in the metro
+helpline,DMRC helpline number
+helpline,Customer care contact number
+helpline,How to contact metro support?
+metro_timings,What time does metro start?
+metro_timings,Metro opening and closing timings
+metro_timings,First metro from Kashmere Gate
+recharge,How to recharge metro card?
+recharge,Where can I top up my smart card?
+recharge,Online recharge options for metro card
+airport,How to reach IGI airport by metro?
+airport,Airport Express line route
+airport,Metro to Terminal 3
+rules,What are the metro rules?
+rules,Is eating allowed in metro?
+rules,Can I carry a bicycle in metro?
+wifi,Is WiFi available in metro stations?
+wifi,How to connect to metro WiFi?
+wifi,Free internet in metro
+parking,Where can I park my car near metro station?
+parking,Park and ride facilities
+parking,Metro station parking charges
+smart_card,What is a smart card?
+smart_card,Difference between token and smart card
+smart_card,Benefits of metro smart card
+peak_hours,What are peak hours in metro?
+peak_hours,When is metro most crowded?
+peak_hours,Rush hour timings
+interchange,Which are interchange stations?
+interchange,How to change lines at Rajiv Chowk?
+interchange,Transfer between Yellow and Blue line

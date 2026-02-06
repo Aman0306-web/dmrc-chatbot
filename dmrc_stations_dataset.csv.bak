@@ -1,0 +1,14 @@
+station_id,station_name,lines,interchange
+1,New Delhi,red;yellow;airport_express,Yes
+2,Rajiv Chowk,blue;yellow;violet;pink,Yes
+3,Kashmere Gate,red,Yes
+4,Chandni Chowk,red;yellow;violet;magenta,Yes
+5,Kasturba Nagar,red;pink;magenta,Yes
+6,Inder Lok,red;pink;magenta,Yes
+7,Netaji Subhas Place,red;pink;magenta,Yes
+8,Central Secretariat,yellow;violet,Yes
+9,Kalkaji Mandir,yellow;green;magenta,Yes
+10,Dwarka,blue;grey,Yes
+11,Indraprastha,green;airport_express,Yes
+12,Mandi House,pink;magenta,Yes
+13,Khan Market,violet;magenta,Yes
