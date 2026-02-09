@@ -7,7 +7,7 @@ from fuzzy_search import fuzzy_search_station, autocomplete_station
 from station_loader import StationLoader
 
 # Load stations
-loader = StationLoader("dmrc_stations_dataset.csv")
+loader = StationLoader("dmrc_master_stations.csv")
 stations = list(loader.stations.keys())
 
 # Basic search
@@ -276,7 +276,7 @@ from station_loader import StationLoader
 from fuzzy_search import fuzzy_search_station
 
 app = FastAPI()
-loader = StationLoader("dmrc_stations_dataset.csv")
+loader = StationLoader("dmrc_master_stations.csv")
 stations = list(loader.stations.keys())
 
 @app.get("/api/search")
@@ -488,7 +488,7 @@ def test_fuzzy_search():
     from station_loader import StationLoader
     from fuzzy_search import fuzzy_search_station, best_match_station
     
-    loader = StationLoader("dmrc_stations_dataset.csv")
+    loader = StationLoader("dmrc_master_stations.csv")
     stations = list(loader.stations.keys())
     
     # Test cases
@@ -528,7 +528,7 @@ from fuzzy_search import (
 )
 
 app = FastAPI(title="DMRC Fuzzy Search")
-loader = StationLoader("dmrc_stations_dataset.csv")
+loader = StationLoader("dmrc_master_stations.csv")
 stations = list(loader.stations.keys())
 
 @app.get("/api/fuzzy-search")

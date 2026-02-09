@@ -1204,23 +1204,13 @@ Fine up to ₹500 for violations
 
         async function loadStations() {
             try {
-                const linesResp = await fetch(`${API_BASE_URL}/lines`);
-                if (!linesResp.ok) throw new Error('Failed to load lines');
-                const linesData = await linesResp.json();
-                
-                let allStations = new Set();
-                for (const line of linesData.lines) {
-                    try {
-                        const stationsResp = await fetch(`${API_BASE_URL}/stations/${line.code}`);
-                        if (!stationsResp.ok) throw new Error(`Failed to load stations for ${line.code}`);
-                        const stationsData = await stationsResp.json();
-                        stationsData.stations.forEach(s => allStations.add(s));
-                    } catch (e) {
-                        console.warn(`Error loading line ${line.code}:`, e);
-                    }
+                // Fetch all stations from the dedicated /api/stations endpoint
+                const response = await fetch(`${API_BASE_URL}/api/stations`);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch stations: ${response.status} ${response.statusText}`);
                 }
-
-                const stations = Array.from(allStations).sort();
+                const data = await response.json();
+                const stations = data.stations; // Assuming the API returns { "stations": [...] }
                 
                 // Populate dropdowns efficiently
                 const fromSelect = document.getElementById('fromStation');
@@ -1246,8 +1236,8 @@ Fine up to ₹500 for violations
                 const toSelect = document.getElementById('toStation');
                 fromSelect.innerHTML = '<option value="">⚠️ Error loading stations</option>';
                 toSelect.innerHTML = '<option value="">⚠️ Error loading stations</option>';
-            }
-        }
+    }
+}
 
         function sendQuickMessage(message) {
             document.getElementById('chatInput').value = message;
@@ -1445,7 +1435,7 @@ Fine up to ₹500 for violations
                             ${route.interchanges.map(i => `
                                 <div class="station-item">
                                     <strong>${i.station}</strong>
-                                    <span style="font-size: 12px; color: #666; margin-left: auto;">${i.lines.join(' ↔ ')}</span>
+                                    <span style="font-size: 12px; color: #666; margin-left: auto;">${(i.lines || []).join(' ↔ ')}</span>
                                 </div>
                             `).join('')}
                         </div>

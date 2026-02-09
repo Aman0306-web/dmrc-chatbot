@@ -19,7 +19,7 @@ def haversine_km(a_lat, a_lon, b_lat, b_lon):
     return R * c
 
 class StationLoader:
-    def __init__(self, stations_csv="dmrc_stations_dataset.csv", stations_meta_csv=None, lines_routes_csv=None):
+    def __init__(self, stations_csv="dmrc_master_stations.csv", stations_meta_csv=None, lines_routes_csv=None):
         self.stations_csv = stations_csv
         self.stations_meta_csv = stations_meta_csv
         self.lines_routes_csv = lines_routes_csv
@@ -38,7 +38,7 @@ class StationLoader:
         with open(self.stations_csv, newline='', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
-                name = self._normalize(row.get('Station', '') or row.get('station_name', ''))
+                name = self._normalize(row.get('station_name', '') or row.get('Station', ''))
                 line = (row.get('Line') or row.get('lines') or '').strip()
                 lat = row.get('Latitude') or row.get('latitude') or row.get('Lat') or ''
                 lon = row.get('Longitude') or row.get('longitude') or row.get('Lon') or ''

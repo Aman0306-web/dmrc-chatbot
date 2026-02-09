@@ -8,7 +8,7 @@ import shutil
 
 PROJECT_ROOT = Path(__file__).parent.resolve()
 OUTPUT_MASTER = PROJECT_ROOT / "dmrc_master_stations.csv"
-ACTIVE_STATIONS = PROJECT_ROOT / "dmrc_stations_dataset.csv"
+ACTIVE_STATIONS = PROJECT_ROOT / "dmrc_master_stations.csv"
 ROUTES_DIR = PROJECT_ROOT / "routes"
 BACKUP_SUFFIX = ".bak"
 

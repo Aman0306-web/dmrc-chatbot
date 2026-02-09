@@ -9,7 +9,7 @@ sys.path.insert(0, '.')
 from station_loader import StationLoader
 
 def main():
-    loader = StationLoader("dmrc_stations_dataset.csv")
+    loader = StationLoader("dmrc_master_stations.csv")
     
     print("=" * 70)
     print("ADVANCED STATIONLOADER EXAMPLES - CHATBOT USE CASES")

@@ -34,7 +34,7 @@ def bfs_shortest_path(graph: Dict[str, Dict], start: str, goal: str) -> Optional
         path = queue.popleft()
         node = path[-1]
         
-        for neighbor in graph.get(node, {}):
+        for neighbor in sorted(graph.get(node, {}).keys()):
             if neighbor in visited:
                 continue
             

@@ -10,7 +10,7 @@ import routing
 
 # Initialize
 app = FastAPI()
-station_loader = StationLoader("dmrc_stations_dataset.csv")
+station_loader = StationLoader("dmrc_master_stations.csv")
 
 # ============================================================================
 # REQUEST/RESPONSE MODELS

@@ -1,0 +1,86 @@
+/* =========================================
+   PART 1: DESIGN SYSTEM (Canva-Style)
+   ========================================= */
+
+:root {
+    /* --- Brand Colors --- */
+    --primary-color: #8B3DFF;       /* Canva-like Purple */
+    --primary-hover: #7A2BE0;
+    --primary-light: #F4EBFF;       /* For backgrounds of active items */
+    --accent-color: #00C4CC;        /* Teal for highlights */
+    --danger-color: #FF4D4F;
+
+    /* --- UI Backgrounds --- */
+    --bg-app: #F8F9FC;              /* Main app background */
+    --bg-surface: #FFFFFF;          /* Card background */
+    --bg-sidebar: #FFFFFF;
+    --bg-chat-bubble-user: #8B3DFF;
+    --bg-chat-bubble-bot: #F0F2F5;
+
+    /* --- Typography Colors --- */
+    --text-main: #111827;           /* Almost black */
+    --text-secondary: #6B7280;      /* Gray text */
+    --text-on-primary: #FFFFFF;
+
+    /* --- Metro Line Colors (DMRC Official) --- */
+    --line-red: #DC143C;
+    --line-yellow: #FFD700;
+    --line-blue: #4169E1;
+    --line-green: #228B22;
+    --line-violet: #8B00FF;
+    --line-pink: #FF69B4;
+    --line-magenta: #FF00FF;
+    --line-grey: #808080;
+    --line-airport: #FF6347;
+
+    /* --- Spacing & Sizing --- */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;      /* Standard card radius */
+    --radius-lg: 20px;      /* Chat bubble radius */
+    --radius-full: 9999px;  /* Buttons */
+
+    /* --- Shadows (Soft, Canva-style) --- */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-float: 0 12px 32px rgba(139, 61, 255, 0.2); /* Purple glow */
+
+    /* --- Transitions --- */
+    --transition-fast: 0.2s ease;
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* --- Layout Dimensions --- */
+    --sidebar-width: 280px;
+    --header-height: 64px;
+}
+
+/* Font Import (Google Fonts) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* --- Dark Mode Overrides --- */
+[data-theme="dark"] {
+    --bg-app: #111827;
+    --bg-surface: #1F2937;
+    --bg-sidebar: #1F2937;
+    --bg-chat-bubble-bot: #374151;
+    --text-main: #F9FAFB;
+    --text-secondary: #9CA3AF;
+    --primary-light: #374151;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-float: 0 12px 32px rgba(139, 61, 255, 0.15);
+}

@@ -15,7 +15,7 @@ from fuzzy_search import (
 
 # Initialize
 app = FastAPI()
-loader = StationLoader("dmrc_stations_dataset.csv")
+loader = StationLoader("dmrc_master_stations.csv")
 
 # ============================================================================
 # REQUEST/RESPONSE MODELS

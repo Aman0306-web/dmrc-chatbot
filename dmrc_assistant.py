@@ -48,7 +48,7 @@ LOCAL_MATCH_MIN_OVERLAP = 2
 
 # CSV filenames (expected in project root)
 INTENTS_CSV = Path(__file__).parent / "dmrc_chatbot_intents.csv"
-STATIONS_CSV = Path(__file__).parent / "dmrc_stations_dataset.csv"
+STATIONS_CSV = Path(__file__).parent / "dmrc_master_stations.csv"
 
 class DMRCAssistant:
     def __init__(self):
@@ -111,11 +111,17 @@ class DMRCAssistant:
                             continue
                         lines = [l.strip() for l in row.get("lines", "").split(",") if l.strip()]
                         interchange = row.get("interchange", "").strip().lower() == "yes"
+                        
+                        # Capture all other columns as metadata (e.g., parking, lift, gates)
+                        metadata = {k.lower(): v.strip() for k, v in row.items() 
+                                   if k not in ["station_name", "lines", "interchange", "station_id"] and v and v.strip()}
+
                         self.stations[name.lower()] = {
                             "id": row.get("station_id", "").strip(),
                             "name": name,
                             "lines": lines,
-                            "interchange": interchange
+                            "interchange": interchange,
+                            "metadata": metadata
                         }
                 logger.info(f"Loaded {len(self.stations)} stations from CSV")
             except Exception as e:
@@ -328,12 +334,31 @@ class DMRCAssistant:
         if station_in_q:
             st = self.get_station_info(station_in_q)
             if st:
-                lines = st.get("lines", [])
-                interchange = st.get("interchange")
-                if language == "hi":
-                    resp = f"स्टेशन: {st.get('name')}\nलाइनें: {', '.join(lines)}\nइंटरचेंज: {'हाँ' if interchange else 'नहीं'}"
+                # Check if user is asking about specific metadata (parking, lift, etc.)
+                q_lower = user_query.lower()
+                metadata = st.get("metadata", {})
+                
+                # Dynamic lookup: check if query contains any column name present in metadata
+                found_info = []
+                for key, val in metadata.items():
+                    # If column name (e.g. 'parking') is in query
+                    if key in q_lower:
+                        found_info.append(f"{key.title()}: {val}")
+                
+                if found_info:
+                    # Specific info found (e.g. Parking: Yes)
+                    resp = f"Station: {st.get('name')}\n" + "\n".join(found_info)
                 else:
+                    # Default station info
+                    lines = st.get("lines", [])
+                    interchange = st.get("interchange")
                     resp = f"Station: {st.get('name')}\nLines: {', '.join(lines)}\nInterchange: {'Yes' if interchange else 'No'}"
+                    
+                    # Hint about available extra info
+                    if metadata:
+                        available = ", ".join(metadata.keys())
+                        resp += f"\n\n(I also have info about: {available})"
+
                 return {
                     "response": resp,
                     "language": language,

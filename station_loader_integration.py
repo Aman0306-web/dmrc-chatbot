@@ -17,7 +17,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 # Initialize loader at startup
-loader = StationLoader("dmrc_stations_dataset.csv")
+loader = StationLoader("dmrc_master_stations.csv")
 
 # ============================================================================
 # EXAMPLE 1: Enhanced station info endpoint
@@ -178,7 +178,7 @@ from station_loader import StationLoader
 app = FastAPI()
 
 # Initialize at startup
-loader = StationLoader("dmrc_stations_dataset.csv")
+loader = StationLoader("dmrc_master_stations.csv")
 
 @app.get("/api/station/{station_name}")
 def station_info(station_name: str):

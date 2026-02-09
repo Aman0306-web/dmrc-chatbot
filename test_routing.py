@@ -15,7 +15,7 @@ def main():
     print("=" * 70)
     
     # Initialize loader
-    loader = StationLoader("dmrc_stations_dataset.csv")
+    loader = StationLoader("dmrc_master_stations.csv")
     
     print(f"\nDataset: {len(loader.stations)} stations, {len(loader.lines_index)} lines")
     print(f"Graph connections: {sum(len(v) for v in loader.graph.values()) // 2}")

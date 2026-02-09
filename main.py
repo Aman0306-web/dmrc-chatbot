@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from collections import defaultdict, deque
 from typing import Dict
@@ -11,10 +12,11 @@ import logging
 
 # Import enhanced modules
 try:
+    import routing
     from station_loader import StationLoader
-    STATION_LOADER = StationLoader("dmrc_stations_dataset.csv")
+    STATION_LOADER = StationLoader("dmrc_master_stations.csv")
 except Exception as e:
-    print(f"⚠️ StationLoader failed to load: {e}")
+    print(f"⚠️ StationLoader/Routing failed to load: {e}")
     STATION_LOADER = None
 
 try:
@@ -34,11 +36,50 @@ app = FastAPI()
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def startup_event():
+    simulate = os.getenv("ASSISTANT_SIMULATE_LIVE", "false").lower() in ("true", "1", "yes")
+    
+    # Sync METRO_DATA with CSV if available (Connects Backend Logic to Data File)
+    if STATION_LOADER:
+        print("🔄 Syncing METRO_DATA from StationLoader CSV...")
+        updates = 0
+        for line_name, stations in STATION_LOADER.lines_index.items():
+            # Normalize key: "Red Line" -> "red", "Airport Express" -> "airport_express"
+            key = line_name.lower().replace(" ", "_")
+            
+            if key in METRO_DATA:
+                METRO_DATA[key]["stations"] = stations
+                updates += 1
+            else:
+                # Add new line found in CSV
+                METRO_DATA[key] = {
+                    "name": line_name.title(),
+                    "color": "#808080", # Default color for new lines
+                    "stations": stations,
+                    "first_train": "06:00 AM",
+                    "last_train": "11:00 PM"
+                }
+                updates += 1
+        
+        _STATION_LOOKUP.clear()
+        for line_data in METRO_DATA.values():
+            for s in line_data["stations"]:
+                _STATION_LOOKUP[s.strip().lower()] = s
+                
+        print(f"✅ Synced {updates} lines from CSV to internal METRO_DATA")
+
+    print("\n" + "="*60)
+    print(f"🚀 DMRC MetroSahayak Backend Running")
+    print(f"🔧 Mode: {'SIMULATION (Fix Applied)' if simulate else 'LIVE API'}")
+    print(f"📂 Docs: http://localhost:8000/docs")
+    print("="*60 + "\n")
 
 # ==================== DATA STRUCTURES ====================
 
@@ -259,57 +300,6 @@ HELP_CONTENT = {
         "hi": "आपातकालीन संपर्क:\n• कस्टमर केयर: 155370\n• सीआईएसएफ (सुरक्षा): 155655\n• खोई हुई चीजें: कश्मीरी गेट\n• महिला सुरक्षा: 155370 डायल करें\n• चिकित्सा: 155370"
     }
 }
-
-# ==================== GRAPH DATA STRUCTURE FOR ROUTE FINDING ====================
-
-class MetroGraph:
-    def __init__(self):
-        self.graph = defaultdict(list)
-        self.build_graph()
-
-    def build_graph(self):
-        """Build a graph of all stations and connections, avoid adding duplicate edges"""
-        for line_key, line_data in METRO_DATA.items():
-            stations = line_data["stations"]
-            for i in range(len(stations) - 1):
-                station1 = stations[i]
-                station2 = stations[i + 1]
-                # Avoid duplicate edges
-                if not any(n == station2 and l == line_key for n, l, _ in self.graph[station1]):
-                    self.graph[station1].append((station2, line_key, 1))
-                if not any(n == station1 and l == line_key for n, l, _ in self.graph[station2]):
-                    self.graph[station2].append((station1, line_key, 1))
-
-    def find_shortest_path(self, start: str, end: str) -> Dict:
-        """BFS to find shortest path between two stations"""
-        if start not in self.graph or end not in self.graph:
-            return {"error": "Station not found"}
-
-        if start == end:
-            return {"stations": [start], "line": "Same Station", "distance": 0}
-
-        queue = deque([(start, [start], None, 0)])
-        visited = {start}
-
-        while queue:
-            current, path, line, distance = queue.popleft()
-
-            if current == end:
-                return {
-                    "stations": path,
-                    "line": line if line else "Multiple Lines",
-                    "distance": distance,
-                    "stops": distance
-                }
-
-            for neighbor, line_key, weight in self.graph[current]:
-                if neighbor not in visited:
-                    visited.add(neighbor)
-                    queue.append((neighbor, path + [neighbor], line_key if line is None else line, distance + weight))
-
-        return {"error": "No path found"}
-
-metro_graph = MetroGraph()
 
 # Build case-insensitive station lookup map
 _STATION_LOOKUP = {}
@@ -646,14 +636,14 @@ def find_route(query: RouteQuery):
     if from_st == to_st:
         raise HTTPException(status_code=400, detail="From and To stations are the same")
 
-    # Find shortest path
-    path_result = metro_graph.find_shortest_path(from_st, to_st)
+    # Find shortest path using routing module
+    path = routing.bfs_shortest_path(STATION_LOADER.graph, from_st, to_st)
 
-    if "error" in path_result:
-        raise HTTPException(status_code=404, detail=path_result["error"])
+    if not path:
+        raise HTTPException(status_code=404, detail="No route found between these stations")
 
-    stations = path_result["stations"]
-    num_stations = len(stations)
+    stations = path
+    num_stations = len(path)
     
     # Calculate fare
     fare = chatbot.calculate_fare(num_stations)
@@ -911,7 +901,19 @@ def get_station(station_name: str):
     Example: /station/Rajiv%20Chowk
     """
     if not STATION_LOADER:
-        raise HTTPException(status_code=503, detail="Station loader not available")
+        # Fallback for when CSV loader is not active
+        canonical = normalize_station(station_name)
+        if not canonical:
+            raise HTTPException(status_code=404, detail="Station not found")
+        
+        lines = get_station_lines(canonical)
+        return {
+            "name": canonical,
+            "lines": lines,
+            "coordinates": {"lat": None, "lon": None},
+            "is_interchange": len(lines) > 1,
+            "lines_detail": {}
+        }
     
     station = STATION_LOADER.get_station(station_name)
     if not station:
@@ -949,7 +951,16 @@ def get_all_lines_enhanced():
     Get list of all available metro lines with station counts.
     """
     if not STATION_LOADER:
-        raise HTTPException(status_code=503, detail="Station loader not available")
+        # Fallback to METRO_DATA if StationLoader is not available
+        lines_info = []
+        for key, data in METRO_DATA.items():
+            lines_info.append({
+                "name": key,
+                "total_stations": len(data["stations"]),
+                "start": data["stations"][0] if data["stations"] else None,
+                "end": data["stations"][-1] if data["stations"] else None
+            })
+        return {"total_lines": len(lines_info), "lines": lines_info}
     
     lines_info = []
     for line in STATION_LOADER.list_all_lines():
@@ -969,6 +980,42 @@ def get_all_lines_enhanced():
         "lines": lines_info
     }
 
+@app.get("/api/stations")
+def get_all_stations_list():
+    """Get a flat list of all station names for dropdowns."""
+    if STATION_LOADER:
+        # Return stations from CSV if available
+        return {"stations": sorted([s["name"] for s in STATION_LOADER.stations.values()])}
+    
+    # Fallback to METRO_DATA
+    all_stations = set()
+    for line in METRO_DATA.values():
+        for s in line["stations"]:
+            all_stations.add(s)
+    return {"stations": sorted(list(all_stations))}
+
+@app.get("/dashboard")
+def dashboard_ui():
+    return FileResponse("dashboard.html")
+
+@app.get("/api/nearest")
+def get_nearest_station(lat: float, lon: float, limit: int = 3):
+    """
+    Find nearest metro stations to given coordinates.
+    Example: /api/nearest?lat=28.6328&lon=77.2197
+    """
+    if not STATION_LOADER:
+        raise HTTPException(status_code=503, detail="Station data not available")
+    
+    results = STATION_LOADER.nearby(lat, lon, radius_km=10.0)
+    
+    return {
+        "count": len(results[:limit]),
+        "stations": [
+            {"name": s["name"], "distance_km": round(d, 2), "lines": s["lines"]}
+            for d, s in results[:limit]
+        ]
+    }
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

@@ -15,7 +15,7 @@ def main():
     
     # Initialize loader
     print("\n[INIT] Loading stations from CSV...")
-    loader = StationLoader("dmrc_stations_dataset.csv")
+    loader = StationLoader("dmrc_master_stations.csv")
     print("[OK] Initialization complete")
     
     # Summary

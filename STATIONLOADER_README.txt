@@ -32,7 +32,7 @@ Your DMRC project now includes a complete **StationLoader** system for robust st
 
 ### ✓ What It Works With
 
-- **Your Current CSV:** `dmrc_stations_dataset.csv` (83 stations, 9 lines)
+- **Your Current CSV:** `dmrc_master_stations.csv` (Complete dataset with lat/lon)
 - **Your FastAPI:** Drop-in integration ready
 - **Your Chatbot:** Perfect for intent-based queries
 - **Your Data Format:** Auto-detects column names
@@ -44,7 +44,7 @@ Your DMRC project now includes a complete **StationLoader** system for robust st
 ### Step 1: Import
 ```python
 from station_loader import StationLoader
-loader = StationLoader("dmrc_stations_dataset.csv")
+loader = StationLoader("dmrc_master_stations.csv")
 ```
 
 ### Step 2: Use in Main.py

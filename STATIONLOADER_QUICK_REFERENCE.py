@@ -10,7 +10,7 @@ Quick copy-paste solutions for common tasks
 
 from station_loader import StationLoader
 
-loader = StationLoader("dmrc_stations_dataset.csv")
+loader = StationLoader("dmrc_master_stations.csv")
 # All data loaded!
 
 

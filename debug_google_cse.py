@@ -5,7 +5,11 @@ Tests API key, Search Engine ID, and API enablement.
 
 import os
 import sys
-import httpx
+try:
+    import httpx
+except ImportError:
+    print("[FATAL] 'httpx' library is missing. Please run: pip install httpx")
+    sys.exit(1)
 import json
 from pathlib import Path
 
@@ -18,8 +22,10 @@ if sys.stdout.encoding and 'utf' not in sys.stdout.encoding.lower():
 try:
     from dotenv import load_dotenv
     load_dotenv()
-except:
-    pass
+except ImportError:
+    print("[WARN] 'python-dotenv' not installed. .env file might not be loaded.")
+except Exception as e:
+    print(f"[WARN] Error loading .env: {e}")
 
 GOOGLE_CSE_API_KEY = os.getenv("GOOGLE_CSE_API_KEY")
 GOOGLE_CSE_ID = os.getenv("GOOGLE_CSE_ID")
@@ -204,6 +210,8 @@ STEP 6: If Still Failing
   → Check if you have a billing account in Google Cloud
   → 403 can also mean quota exceeded (edit .env and set):
       ASSISTANT_SIMULATE_LIVE=true
+  → Or simply run the auto-fix script:
+      python fix_and_run.py
   → This will use simulated results instead
 
 """)

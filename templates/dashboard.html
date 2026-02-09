@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetroSahayak | DMRC Assistant</title>
+    
+    <!-- Design System (Part 1) -->
+    <link rel="stylesheet" href="../static/css/variables.css">
+    <!-- Dashboard Styles (Part 3) -->
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+    
+    <!-- Icons (Remix Icon for modern, clean look) -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-layout">
+        
+        <!-- 1. LEFT SIDEBAR (Navigation) -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i class="ri-train-fill"></i>
+                </div>
+                <div class="brand-text">
+                    <span>Metro</span><span class="highlight">Sahayak</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <i class="ri-message-3-line"></i>
+                    <span>Chat Assistant</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="ri-map-2-line"></i>
+                    <span>Network Map</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="ri-ticket-line"></i>
+                    <span>Fare Calculator</span>
+                </a>
+                <div class="nav-divider"></div>
+                <a href="#" class="nav-item">
+                    <i class="ri-settings-4-line"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="avatar">G</div>
+                    <div class="user-info">
+                        <span class="name">Guest User</span>
+                        <span class="status">Online</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 2. MAIN CHAT AREA (The Canvas) -->
+        <main class="chat-interface">
+            <header class="chat-header">
+                <div class="header-content">
+                    <h2>Delhi Metro Assistant</h2>
+                    <p>Plan your journey, check fares, or find stations</p>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" id="theme-toggle" title="Toggle Dark Mode"><i class="ri-moon-line"></i></button>
+                    <button class="icon-btn" title="Clear Chat"><i class="ri-delete-bin-line"></i></button>
+                    <button class="icon-btn" title="Help"><i class="ri-question-line"></i></button>
+                </div>
+            </header>
+
+            <div class="chat-stream" id="chat-stream">
+                <!-- Welcome Message -->
+                <div class="message bot">
+                    <div class="avatar"><i class="ri-robot-line"></i></div>
+                    <div class="bubble">
+                        <p>👋 Hi there! I'm your DMRC guide. Where do you want to go today?</p>
+                        <div class="quick-chips">
+                            <button class="chip" onclick="sendQuick('Rajiv Chowk to Noida')">Rajiv Chowk → Noida</button>
+                            <button class="chip" onclick="sendQuick('Show Map')">Show Map</button>
+                            <button class="chip" onclick="sendQuick('Fare to Airport')">Airport Fare</button>
+                        </div>
+                    </div>
+                    <span class="time">Just now</span>
+                </div>
+                <!-- Messages will be injected here by JS -->
+            </div>
+
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <button class="attach-btn"><i class="ri-add-circle-line"></i></button>
+                    <input type="text" id="user-input" placeholder="Type a station or route (e.g., 'Hauz Khas to Saket')..." autocomplete="off">
+                    <button class="send-btn" id="send-btn">
+                        <i class="ri-send-plane-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- 3. RIGHT INFO PANEL (Context) -->
+        <aside class="info-panel">
+            <div class="panel-content">
+                <!-- Dynamic Route Card (Hidden by default) -->
+                <div id="route-card" class="info-card route-card hidden">
+                    <div class="card-header">
+                        <h3>Journey Details</h3>
+                        <span class="badge-time" id="route-time">-- min</span>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <span class="label">Stations</span>
+                            <span class="value" id="stat-stations">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Changes</span>
+                            <span class="value" id="stat-changes">0</span>
+                        </div>
+                    </div>
+
+                    <div class="route-timeline" id="route-timeline">
+                        <!-- Steps injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Default Map Preview -->
+                <div class="info-card map-preview">
+                    <h3>Network Status</h3>
+                    <div class="map-placeholder">
+                        <i class="ri-map-pin-range-line"></i>
+                        <p>Interactive Map View</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Scripts (Part 4) -->
+    <script src="../static/js/dashboard.js"></script>
+</body>
+</html>

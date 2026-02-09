@@ -639,7 +639,7 @@
                             ${route.interchanges.map(i => `
                                 <div class="station-item">
                                     <strong>${i.station}</strong>
-                                    <span style="font-size: 11px; color: #999; margin-left: auto;">${i.lines.join(', ')}</span>
+                                    <span style="font-size: 11px; color: #999; margin-left: auto;">${(i.lines || []).join(', ')}</span>
                                 </div>
                             `).join('')}
                         </div>

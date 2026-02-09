@@ -5,13 +5,13 @@ add_or_merge_stations.py
 Merge/expand DMRC stations CSV into your project safely.
 
 Features:
-- Reads existing project file: dmrc_stations_dataset.csv (if exists)
+- Reads existing project file: dmrc_master_stations.csv (if exists)
 - Reads a source file provided by --source (example: full_stations.csv) OR falls back to dmrc_stations_dataset_expanded.csv if present
 - Normalizes station names, lines, interchange flag
 - Generates unique station_id when missing (based on initials + number)
 - Deduplicates by station_name (case-insensitive)
 - Writes merged output to dmrc_stations_dataset_full.csv
-- Optionally overwrites the active dmrc_stations_dataset.csv with --activate (creates backup)
+- Optionally overwrites the active dmrc_master_stations.csv with --activate (creates backup)
 - Prints a summary of additions/changes
 
 Usage:
@@ -33,7 +33,7 @@ import shutil
 import re
 
 PROJECT_ROOT = Path(__file__).parent.resolve()
-ACTIVE_FILENAME = PROJECT_ROOT / "dmrc_stations_dataset.csv"
+ACTIVE_FILENAME = PROJECT_ROOT / "dmrc_master_stations.csv"
 EXPANDED_FALLBACK = PROJECT_ROOT / "dmrc_stations_dataset_expanded.csv"
 OUTPUT_FULL = PROJECT_ROOT / "dmrc_stations_dataset_full.csv"
 BACKUP_SUFFIX = ".bak"
@@ -182,7 +182,7 @@ def backup_file(path: Path):
 def main():
     parser = argparse.ArgumentParser(description="Merge/expand DMRC stations CSV into project.")
     parser.add_argument("--source", "-s", type=str, help="Source CSV with full station list to merge (station_id,station_name,lines,interchange)")
-    parser.add_argument("--activate", action="store_true", help="Overwrite project's dmrc_stations_dataset.csv with merged file (creates backup)")
+    parser.add_argument("--activate", action="store_true", help="Overwrite project's dmrc_master_stations.csv with merged file (creates backup)")
     parser.add_argument("--output", type=str, default=str(OUTPUT_FULL), help="Output full merged CSV filename")
     args = parser.parse_args()
 
@@ -225,7 +225,7 @@ def main():
     print(f"Wrote merged station list to {output_path}")
 
     if args.activate:
-        print("Activating merged file as project's active dmrc_stations_dataset.csv ...")
+        print("Activating merged file as project's active dmrc_master_stations.csv ...")
         backup_file(ACTIVE_FILENAME)
         shutil.copy2(output_path, ACTIVE_FILENAME)
         print(f"Overwrote {ACTIVE_FILENAME} (backup created)")
